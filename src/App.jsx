@@ -1,122 +1,168 @@
-import { useState } from 'react'
-import heroImg from './assets/hero.png'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import './App.css'
+import { useState } from "react";
+import "./App.css";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [todos, setTodos] = useState([]);
+  const [task, setTask] = useState("");
+  const [filter, setFilter] = useState("All");
+  const [editingId, setEditingId] = useState(null);
+  const [editText, setEditText] = useState("");
+
+  // Add new task
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const title = task.trim();
+    if (!title) return;
+
+    const newTodo = {
+      id: crypto.randomUUID(),
+      title,
+      completed: false,
+    };
+
+    setTodos((prev) => [...prev, newTodo]);
+    setTask("");
+  };
+
+  // Mark task complete or incomplete
+  const toggleTodo = (id) => {
+    setTodos((prev) =>
+      prev.map((todo) =>
+        todo.id === id
+          ? { ...todo, completed: !todo.completed }
+          : todo
+      )
+    );
+  };
+
+  // Delete task
+  const deleteTodo = (id) => {
+    setTodos((prev) => prev.filter((todo) => todo.id !== id));
+  };
+
+  // Start editing task
+  const startEdit = (id, title) => {
+    setEditingId(id);
+    setEditText(title);
+  };
+
+  const saveEdit = (e) => {
+    e.preventDefault();
+    const title = editText.trim();
+    if (!title) return;
+
+    setTodos((prev) =>
+      prev.map((todo) =>
+        todo.id === editingId ? { ...todo, title } : todo
+      )
+    );
+
+    setEditingId(null);
+    setEditText("");
+  };
+
+  // Filter tasks
+  const filteredTodos = todos.filter((todo) => {
+    if (filter === "Active") return !todo.completed;
+    if (filter === "Completed") return todo.completed;
+    return true;
+  });
+
+  const remaining = todos.filter((todo) => !todo.completed).length;
+  const completedCount = todos.filter((todo) => todo.completed).length;
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+    <div className="app">
+      <header className="header">
+        <div className="logo">TaskMate</div>
+      </header>
 
-      <div className="ticks"></div>
+      <p className="subtitle">Small steps every day lead to big results.</p>
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
+      {/* Dashboard Stats */}
+      <div className="stats-container">
+        <div className="stat-card">
+          <span>Total Tasks</span>
+          <h2>{todos.length}</h2>
         </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
+        <div className="stat-card">
+          <span>Remaining</span>
+          <h2>{remaining}</h2>
         </div>
-      </section>
+        <div className="stat-card">
+          <span>Completed</span>
+          <h2>{completedCount}</h2>
+        </div>
+      </div>
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+      {/* Main Task Section */}
+      <div className="task-section">
+        <h3>My Tasks</h3>
+        <p>Keep track of what matters today.</p>
+
+        <form onSubmit={handleSubmit} className="task-form">
+          <input
+            type="text"
+            placeholder="What do you need to do?"
+            value={task}
+            onChange={(e) => setTask(e.target.value)}
+          />
+          <button type="submit">+ Add Task</button>
+        </form>
+
+        {/* Filter Buttons */}
+        <div className="filter-buttons">
+          {["All", "Active", "Completed"].map((f) => (
+            <button
+              key={f}
+              className={filter === f ? "active" : ""}
+              onClick={() => setFilter(f)}
+            >
+              {f}
+            </button>
+          ))}
+          <span className="task-count">{filteredTodos.length} tasks</span>
+        </div>
+
+        {/* Task List */}
+        <ul className="task-list">
+          {filteredTodos.map((todo) => (
+            <li key={todo.id} className="task-item">
+              {editingId === todo.id ? (
+                <form onSubmit={saveEdit} className="edit-form">
+                  <input
+                    type="text"
+                    value={editText}
+                    onChange={(e) => setEditText(e.target.value)}
+                  />
+                  <button type="submit">Save</button>
+                </form>
+              ) : (
+                <>
+                  <div className="task-content">
+                    <input
+                      type="checkbox"
+                      checked={todo.completed}
+                      onChange={() => toggleTodo(todo.id)}
+                    />
+                    <span className={todo.completed ? "completed-text" : ""}>
+                      {todo.title}
+                    </span>
+                  </div>
+                  <div className="task-actions">
+                    <button onClick={() => startEdit(todo.id, todo.title)}>
+                      Edit
+                    </button>
+                    <button onClick={() => deleteTodo(todo.id)}>Delete</button>
+                  </div>
+                </>
+              )}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  );
 }
 
-export default App
+export default App;
