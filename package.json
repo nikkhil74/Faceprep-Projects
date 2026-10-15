@@ -1,11 +1,18 @@
 {
+<<<<<<< HEAD
   "name": "my-app",
   "private": true,
   "version": "0.0.0",
+=======
+  "name": "react-frontend",
+  "version": "0.0.0",
+  "private": true,
+>>>>>>> fbfab53b7699c54bc9d36094b1d051d53d204387
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+<<<<<<< HEAD
     "lint": "eslint .",
     "preview": "vite preview"
   },
@@ -23,6 +30,11 @@
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.6",
     "globals": "^17.12.0",
+=======
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+>>>>>>> fbfab53b7699c54bc9d36094b1d051d53d204387
     "vite": "^8.3.0"
   }
 }
