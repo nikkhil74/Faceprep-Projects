@@ -1,0 +1,104 @@
+*{
+    box-sizing: border-box;
+}
+
+body{
+    margin : 0;
+    font-family: verdana, sans-serif;
+    background: #b1bbd4;
+    color: #1a2842;
+}
+
+.header{
+    background:#304e9b;
+    color: white;
+    text-align: center;
+    padding: 35px 15px;
+}
+
+.header h1{
+    margin:0;
+    font-size: 36px;
+}
+
+.header p{
+    margin-bottom: 0;
+
+}
+
+.container{
+    width: 90%;
+    max-width: 1100px;
+    margin: 30px auto;
+}
+
+.controls{
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+input{
+    flex:1;
+    min-width: 0;
+    padding: 12px;
+    border: 1px solid white;
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+button{
+    padding: 12px 16px;
+    border: none;
+    border-radius: 8px;
+    background:white;
+    color:rgb(143, 116, 116);
+    cursor:pointer;
+    font-size: 15px;
+}
+
+button:hover{
+    background:rgb(142, 192, 142) ;
+    cursor: not-allowed;
+}
+
+#statusMessage{
+    color : rgb(86, 84, 84);
+}
+.error{
+    color: palevioletred;
+}
+
+.post-grid{
+    display: grid;
+    grid-template-columns: repeat(3, minmax (0,1fr));
+    gap: 20px;
+}
+
+
+.post-card h2{
+    margin-top:0;
+    font-size:20px;
+    text-transform: capitalize;
+
+}
+.post-card p{
+    color: rgb(85, 82, 82);
+    overflow-wrap: anywhere;
+}
+
+.post-number{
+    color: rgb(85, 82, 82);
+    font-size:13px;
+    font-weight: bold;
+}
+@media(max-width:800px){
+    .post-grid{
+        grid-template-columns: repeat(2,minmax(0,1fr));
+    }
+}
+@media(max-width:550px){
+    .post{
+        grid-template-columns: 1fr;
+    }
+}
